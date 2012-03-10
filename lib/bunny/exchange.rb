@@ -134,6 +134,7 @@ module Bunny
       immediate = opts.delete(:immediate)
       delivery_mode = opts.delete(:persistent) ? 2 : 1
       content_type = opts.delete(:content_type) || 'application/octet-stream'
+      reply_to = opts.delete(:reply_to)
 
       out << Qrack::Protocol::Basic::Publish.new({ :exchange => name,
                                                      :routing_key => routing_key,
@@ -146,7 +147,8 @@ module Bunny
                                            data.bytesize, {
                                              :content_type  => content_type,
                                              :delivery_mode => delivery_mode,
-                                             :priority      => 0
+                                             :priority      => 0,
+                                             :reply_to => reply_to
                                            }.merge(opts)
                                            )
       out << Qrack::Transport::Body.new(data)
